@@ -2,12 +2,26 @@
 # Kemal Turksonmez
 # Arash Ajam
 from network import Network
+from backpropogation import BackPropogation
 from process_data import PD
 import numpy as np
 # This class contains methods to run and train models on each data set
 class Models:
     def __init__(self):
         self.pd = PD()
+
+    def graphData(self, n_hidden, n_outputs, n_inputs, layer_nodes, problemType, classOutputs, batch_size, num_runs, lr, momentum, bestIndex):
+        # dataset split
+        if problemType == "classification":
+            trainData, testData = self.pd.stratifiedSplit(data, bestIndex)
+        else:
+            trainData, testData = self.pd.regressiveSplit(data, bestIndex) 
+        # create new network object
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType)
+        backprop = BackPropogation(net)
+        backprop.stochastic_GD(trainData, classOutputs, batch_size, num_runs, lr, momentum)
+        # graph network
+        net.graph(fileName, trainData, testData, classOutputs, batch_size, num_runs, lr, momentum)
 
     def cross_validation(self, data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum=0):
         # standardize data
@@ -55,8 +69,9 @@ class Models:
             if loss < beforeBestLoss:
                 beforeBestLoss = loss        
             print(error_name, loss)
-
-            net.stochastic_GD(trainData, classOutputs, batch_size, num_runs, lr, momentum)
+            # train back propogation
+            backprop = BackPropogation(net)
+            backprop.stochastic_GD(trainData, classOutputs, batch_size, num_runs, lr, momentum)
 
             print("Outputs after training:")
             loss, acc = net.get_accuracy(testData, classOutputs)
@@ -71,17 +86,8 @@ class Models:
                 afterBestLoss = loss
                 bestIndex = i
             print()
-
-        # dataset split
-        if problemType == "classification":
-            trainData, testData = self.pd.stratifiedSplit(data, bestIndex)
-        else:
-            trainData, testData = self.pd.regressiveSplit(data, bestIndex) 
-        # create new network object
-        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType)
-        # graph network
-        net.graph(fileName, trainData, testData, classOutputs, batch_size, num_runs, lr, momentum)
-        # run graph program
+        
+        # self.graphData(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, classOutputs, batch_size, num_runs, lr, momentum, bestIndex)
 
         print("Before Accuracy average:", beforeAccSum/cv_num)
         print("Before Loss average:", beforeLossSum/cv_num)
