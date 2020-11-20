@@ -3,8 +3,11 @@ from copy import deepcopy
 from numpy.random import shuffle
 import random
 class BackPropogation:
+    # Creates a network object
+    # network - network object
     def __init__(self, network):
         self.net = network
+
     # performs stochiastic gradient descent
     # train_data - training data set
     # class_outputs - contains a list of class outputs for classification problems
@@ -33,19 +36,16 @@ class BackPropogation:
     # lr - learning rate of back propogation
     # momentum - momentum of back propogation
     def update_network(self, batch, class_outputs, lr, momentum):
-        # sum of bias gradients
-        d_b_sum = [np.zeros(b.shape) for b in self.net.biases]
         # sum of weight gradients
         d_w_sum = [np.zeros(w.shape) for w in self.net.weights]
         prev_delta = [np.zeros(w.shape) for w in self.net.weights]
         for i, arr in enumerate(batch):  
             
             # get gradients from test row       
-            d_b, d_w = self.back_prop(arr[:-1], arr[-1], class_outputs)
+            d_w = self.back_prop(arr[:-1], arr[-1], class_outputs)
             if(i == 0):
                 prev_delta = d_w
             # add bias and weight gradients to their respective sums
-            d_b_sum = [nb+dnb for nb, dnb in zip(d_b_sum, d_b)]
             d_w_sum = [nw+dnw for nw, dnw in zip(d_w_sum, d_w)]
             # update d_w_sum to also add delta from previous iteration
             d_w_sum = [nw+momentum*(delta) for nw, delta in zip(d_w_sum, prev_delta)]
@@ -53,7 +53,6 @@ class BackPropogation:
             prev_delta = d_w
         # adjust weight and bias values using summed gradients
         self.net.weights = [w-(lr/len(batch))*nw for w, nw in zip(self.net.weights, d_w_sum)]
-        self.net.biases = [b-(lr/len(batch))*nb for b, nb in zip(self.net.biases, d_b_sum)]
 
     # performs back propogation algorithm of a network
     # inp - is the input vector
@@ -63,30 +62,27 @@ class BackPropogation:
     # d_b - gradients of the bias vector
     # d_c - gradients of the weight vector
     def back_prop(self, inp, expected, class_outputs):
-        d_w, d_b = [], []
+        d_w = []
         out, activations = self.net.feedforward(inp)
         
-        err_dc_db, err_dc_dw = [], []
+        err_dc_dw = []
         if self.net.problemType == "classification":
             # one hot encoding array based on expected output
             expected = self.net.one_hot_encoding(expected, class_outputs)
             # softmax partial derivative in regards to bias
             err_dc_db = self.net.cross_entropy_drvt(activations[-1], expected)
-            d_b.insert(0,err_dc_db) 
             # softmax partial derivative in regards to weight
             err_dc_dw = np.dot(err_dc_db, activations[-2].transpose())
             d_w.insert(0,err_dc_dw)           
         else: 
             # linear partial derivative in regards to bias
             err_dc_db = activations[-1] - expected
-            d_b.insert(0,err_dc_db) 
             # linear partial derivative in regards to weight
             err_dc_dw = err_dc_db * activations[-2].T
             d_w.insert(0,err_dc_dw)
         for l in range(2,len(self.net.net_props)):
             err_dc_db = np.dot(self.net.weights[-l+1].transpose(), err_dc_db) * self.net.sigmoid_drvt(activations[-l]) 
-            d_b.insert(0,err_dc_db)
             err_dc_dw = np.dot(err_dc_db, activations[-l-1].transpose())
             d_w.insert(0,err_dc_dw)
-        return d_b, d_w
+        return d_w
 

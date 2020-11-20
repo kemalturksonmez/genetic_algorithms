@@ -32,10 +32,6 @@ class Network():
     # Initializes the weights and biases based on the network properities
     # net_props - properties of the network (defines the number of nodes)
     def initialize_network(self,net_props):
-            # intialize random biases
-            self.biases = [np.random.randn(y, 1) for y in self.net_props[1:]]
-            if self.problemType == "regression":
-                self.biases = [np.zeros((y,1)) for y in self.net_props[1:]]
             # intialize random weights
             self.weights = [np.random.randn(y, x) for x, y in zip(self.net_props[:-1], self.net_props[1:])]
 
@@ -50,7 +46,7 @@ class Network():
         # tracks index 
         index = 0
         out = inp
-        for b,w in zip(self.biases, self.weights): 
+        for w in self.weights: 
             # print("Layer ", index+2)
             # print("Weights: ", w)
             # print("Inputs: ", out)
@@ -64,9 +60,9 @@ class Network():
                     out = np.dot(w, out)+b
                 else:
                     # softmax
-                    out = self.softmax(np.dot(w, out)+b)                  
+                    out = self.softmax(np.dot(w, out))                  
             else:
-                out = self.sigmoid(np.dot(w, out)+b)    
+                out = self.sigmoid(np.dot(w, out))    
             activations.append(out)
             index += 1
             # print("Output: ", out)
@@ -187,7 +183,7 @@ class Network():
         count = 0
         loss = 0
         if self.problemType == "classification":
-            
+            # Cross Entropy
             for row in test_data:
                 one_hot = self.one_hot_encoding(row[-1], class_outputs)
                 out, activations = self.feedforward(row[:-1])
