@@ -4,7 +4,7 @@ from numpy.random import shuffle
 import random
 class BackPropogation:
     # Creates a network object
-    # network - network object
+    # network - network
     def __init__(self, network):
         self.net = network
 

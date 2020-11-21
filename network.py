@@ -13,7 +13,7 @@ class Network():
     # n_inputs - number of inputs
     # layer_nodes - number of nodes in a hidden layer
     # problemType - identifies if its regression or classification
-    def __init__(self, n_hidden, n_outputs, n_inputs, layer_nodes, problemType):
+    def __init__(self, n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose=True):
         self.n_outputs = n_outputs
         self.net_props = [n_inputs] 
         self.n_hidden = n_hidden
@@ -21,11 +21,12 @@ class Network():
         self.net_props.extend([layer_nodes] * n_hidden)
         self.net_props.append(n_outputs)
         self.problemType = problemType
-        print("Number of inputs: ", n_inputs)
-        print("Number of hidden layer nodes: ", layer_nodes)
-        print("Number of hidden layers: ", n_hidden)
-        print("Number of outputs: ", n_outputs)
-        print("Network Properties: ", self.net_props)
+        if verbose:
+            print("Number of inputs: ", n_inputs)
+            print("Number of hidden layer nodes: ", layer_nodes)
+            print("Number of hidden layers: ", n_hidden)
+            print("Number of outputs: ", n_outputs)
+            print("Network Properties: ", self.net_props)
         self.initialize_network(self.net_props)
         
 

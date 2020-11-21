@@ -3,6 +3,7 @@
 # Arash Ajam
 from network import Network
 from backpropogation import BackPropogation
+from diffevolution import DE
 from process_data import PD
 import numpy as np
 # This class contains methods to run and train models on each data set
@@ -20,10 +21,11 @@ class Models:
         net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType)
         backprop = BackPropogation(net)
         backprop.stochastic_GD(trainData, classOutputs, batch_size, num_runs, lr, momentum)
+
         # graph network
         net.graph(fileName, trainData, testData, classOutputs, batch_size, num_runs, lr, momentum)
 
-    def cross_validation(self, data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum=0):
+    def cross_validation(self, data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, beta=0, cross_prob=0, verbose=True):
         # standardize data
         data = self.pd.standardize_data(data)
         # number of folds in k-folds cross validation
@@ -45,11 +47,11 @@ class Models:
         afterBestAcc = 0
         error_name = "Cross Entropy: "
         if problemType == "regression":
-            
             error_name = "Mean Squared Error: "
         # get array of outputs
         for i in range(cv_num):
-            print("Running iteration: ", i)
+            if verbose:
+                print("Running iteration: ", i)
             # dataset split
             if problemType == "classification":
                 trainData, testData = self.pd.stratifiedSplit(data, i)
@@ -57,27 +59,36 @@ class Models:
                 trainData, testData = self.pd.regressiveSplit(data, i) 
            
             # network object
-            net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType)
-            print("Outputs before training:")
+            net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+            if verbose:
+                print("Outputs before training:")
             loss, acc = net.get_accuracy(testData, classOutputs)
             if problemType == "classification":
-                print("Accuracy: ", acc)
+                if verbose:
+                    print("Accuracy: ", acc)
                 beforeAccSum += acc
                 if acc > beforeBestAcc:
                     beforeBestAcc = acc
             beforeLossSum += loss
             if loss < beforeBestLoss:
-                beforeBestLoss = loss        
-            print(error_name, loss)
+                beforeBestLoss = loss    
+            if verbose:    
+                print(error_name, loss)
             # train back propogation
-            backprop = BackPropogation(net)
-            backprop.stochastic_GD(trainData, classOutputs, batch_size, num_runs, lr, momentum)
+            # backprop = BackPropogation(net)
+            # backprop.stochastic_GD(trainData, classOutputs, batch_size, num_runs, lr, momentum)
 
-            print("Outputs after training:")
+            # train DE
+            de = DE(net)
+            de.train(trainData, beta, cross_prob, classOutputs, num_runs, batch_size, loss)
+            if verbose:
+                print("Outputs after training:")
             loss, acc = net.get_accuracy(testData, classOutputs)
-            print(error_name, loss)
+
+           
             if problemType == "classification":
-                print("Accuracy: ", acc)
+                if verbose:
+                    print("Accuracy: ", acc)
                 afterAccSum += acc
                 if acc > afterBestAcc:
                     afterBestAcc = acc
@@ -85,19 +96,43 @@ class Models:
             if loss < afterBestLoss:
                 afterBestLoss = loss
                 bestIndex = i
-            print()
+            if verbose:
+                print(error_name, loss)
+                print()
         
         # self.graphData(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, classOutputs, batch_size, num_runs, lr, momentum, bestIndex)
+        if verbose:
+            print("Before Accuracy average:", beforeAccSum/cv_num)
+            print("Before Loss average:", beforeLossSum/cv_num)
+            print("Before Best Loss: ", beforeBestLoss)
+            print("Before Best accuracy:", beforeBestAcc)
+            print("After Accuracy average:", afterAccSum/cv_num)
+            print("After Loss average:", afterLossSum/cv_num)
+            print("After Best Loss: ", afterBestLoss)
+            print("After Best accuracy:", afterBestAcc)
+            print()
+        return afterLossSum/cv_num
 
-        print("Before Accuracy average:", beforeAccSum/cv_num)
-        print("Before Loss average:", beforeLossSum/cv_num)
-        print("Before Best Loss: ", beforeBestLoss)
-        print("Before Best accuracy:", beforeBestAcc)
-        print("After Accuracy average:", afterAccSum/cv_num)
-        print("After Loss average:", afterLossSum/cv_num)
-        print("After Best Loss: ", afterBestLoss)
-        print("After Best accuracy:", afterBestAcc)
-        print()
+    def tuneDE(self, data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, beta_range, cross_range):
+        best_beta = 1
+        best_cross_prob = 0.5
+        best_loss = self.cross_validation(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, best_beta, best_cross_prob, False)
+        for i in range(3):
+            for j in range(3):
+                beta = ((beta_range[1]- beta_range[0])/3) * i +  beta_range[0]
+                cross_prob = ((cross_range[1]-cross_range[0])/3) * j + cross_range[0]
+                loss = self.cross_validation(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, beta, cross_prob, False)
+                if loss < best_loss:
+                    best_beta = beta
+                    best_cross_prob = cross_prob
+        print("Beta Range", beta_range)
+        print("Best Beta: ", best_beta)
+        print("Cross Range", cross_range)
+        print("Best Cross Prob: ", best_cross_prob)
+        print("Best Loss Avg Avg: ", best_loss)
+        beta_range = (beta_range[1] - beta_range[0])/3
+        cross_prob = (cross_range[1] - cross_range[0])/3
+        self.tuneDE(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, [best_beta - beta_range,best_beta + beta_range], [best_cross_prob - cross_prob,best_cross_prob + cross_prob])
 
     ################ breast cancer
     def cancer(self):
@@ -142,11 +177,27 @@ class Models:
                     l = l.replace("D4", "4")
                     text.append(l)
         data = np.loadtxt(text, delimiter=",")
+        problemType = "classification"
+        fileName = "soybean"
+        n_inputs = 35
+        n_outputs = 4
+        num_runs = 10000
         # self.cross_validation(data, "classification", "soybean", 2, 4, 35, 15, 4, 25, 1)
 
-        self.cross_validation(data, "classification", "soybean", 0, 4, 35, 0, 3, 10000, 0.001, 0.001)
-        self.cross_validation(data, "classification", "soybean", 1, 4, 35, 20, 3, 10000, 0.001,0.001)
-        self.cross_validation(data, "classification", "soybean", 2, 4, 35, 15, 3, 10000, 0.001, 0.001)
+        # self.cross_validation(data, "classification", "soybean", 0, 4, 35, 0, 3, 10000, 0.001, 0.001)
+        # self.cross_validation(data, "classification", "soybean", 1, 4, 35, 20, 3, 10000, 0.001,0.001)
+        # self.cross_validation(data, "classification", "soybean", 2, 4, 35, 15, 3, 10000, 0.001, 0.001)
+        
+        n_hidden = 2
+        layer_nodes = 8
+        batch_size = 15
+        num_runs = 400
+        lr = 0.001
+        momentum= 0.001
+        beta = 1
+        cross_prob= 0.5
+        self.tuneDE(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, [0,2], [0.8,1])
+        # self.cross_validation(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, beta, cross_prob)
 
 
     ################ Abalone
