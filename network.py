@@ -17,6 +17,7 @@ class Network():
         self.n_outputs = n_outputs
         self.net_props = [n_inputs] 
         self.n_hidden = n_hidden
+        self.n_inputs = n_inputs
         self.layer_nodes = layer_nodes
         self.net_props.extend([layer_nodes] * n_hidden)
         self.net_props.append(n_outputs)
@@ -58,7 +59,7 @@ class Network():
                 # check problem type
                 if self.problemType == 'regression':
                     # linear activation
-                    out = np.dot(w, out)+b
+                    out = np.dot(w, out)
                 else:
                     # softmax
                     out = self.softmax(np.dot(w, out))                  
