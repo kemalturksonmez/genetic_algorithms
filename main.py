@@ -5,8 +5,8 @@ from models import Models
 
 md = Models()
 # md.cancer()
-# md.glass()
-md.soybean()
+md.glass()
+# md.soybean()
 # md.abalone()
 # md.hardware()
 # md.fires()

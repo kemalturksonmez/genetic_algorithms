@@ -4,6 +4,7 @@
 from network import Network
 from backpropogation import BackPropogation
 from diffevolution import DE
+from genetic import GA
 from process_data import PD
 import numpy as np
 # This class contains methods to run and train models on each data set
@@ -79,13 +80,14 @@ class Models:
             # backprop.stochastic_GD(trainData, classOutputs, batch_size, num_runs, lr, momentum)
 
             # train DE
-            de = DE(net)
-            de.train(trainData, beta, cross_prob, classOutputs, num_runs, batch_size, loss)
-            if verbose:
-                print("Outputs after training:")
-            loss, acc = net.get_accuracy(testData, classOutputs)
+            # de = DE(net)
+            # de.train(trainData, beta, cross_prob, classOutputs, num_runs, batch_size, loss)
+            # if verbose:
+            #     print("Outputs after training:")
+            # loss, acc = net.get_accuracy(testData, classOutputs)
 
-           
+            ga = GA(net)
+            ga.train(trainData, classOutputs, batch_size)
             if problemType == "classification":
                 if verbose:
                     print("Accuracy: ", acc)
