@@ -33,9 +33,9 @@ class GA:
     def selection(self, fitness, rate):
         length = len(self.population)
         top = int(length * rate)
-        print(top)
+        # print(top)
         selection = [i[0] for i in fitness[:top]]
-        print(selection)
+        # print(selection)
         return selection
         
     def crossover(self, selection, fit_avg):
@@ -74,7 +74,7 @@ class GA:
         # print("child \n", child_weights)
         self.mutate(child_weights, .2)
         # print("mutated \n", child_weights)
-        
+
         return child_weights
 
 
@@ -99,13 +99,17 @@ class GA:
         convergence = False
         while(not convergence):
             count+=1
+            print("Genration ", count)
             avg, fitness = self.fitness(batch, class_outputs)
             new_select = self.selection(fitness, .2)
-            self.crossover(new_select, avg)
+            childs = self.crossover(new_select, avg)
+            self.population.append(childs)
             avg, fitness = self.fitness(batch, class_outputs)
-            if(avg > .9 or count> 1000):
+            print('avg', avg)
+            if(avg > 9 or count> 1000):
                 convergence = True
-            print(fitness[0][1])
+            print("fittest", fitness[0][1])
+            print("second fittest", fitness[1][1])
         fitness, avg = self.fitness(batch, class_outputs)
         # print(fitness, avg)
 

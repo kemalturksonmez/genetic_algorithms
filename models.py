@@ -86,8 +86,8 @@ class Models:
             #     print("Outputs after training:")
             # loss, acc = net.get_accuracy(testData, classOutputs)
 
-            ga = GA(net)
-            ga.train(trainData, classOutputs, batch_size)
+            # ga = GA(net)
+            # ga.train(trainData, classOutputs, batch_size)
             if problemType == "classification":
                 if verbose:
                     print("Accuracy: ", acc)
@@ -101,7 +101,9 @@ class Models:
             if verbose:
                 print(error_name, loss)
                 print()
-        
+        ga = GA(net)
+        ga.train(trainData, classOutputs, batch_size)
+           
         # self.graphData(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, classOutputs, batch_size, num_runs, lr, momentum, bestIndex)
         if verbose:
             print("Before Accuracy average:", beforeAccSum/cv_num)
