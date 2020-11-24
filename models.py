@@ -6,6 +6,7 @@ from backpropogation import BackPropogation
 from diffevolution import DE
 from process_data import PD
 import numpy as np
+from particleSwarm import PSO
 import matplotlib.pyplot as plt
 # This class contains methods to run and train models on each data set
 class Models:
@@ -47,7 +48,7 @@ class Models:
         plt.savefig('results/' + fileName + '_' + programType + '_' + str(net.n_hidden) +'_layers_loss.png', dpi=600, bbox_inches='tight')
         plt.clf()
 
-    def cross_validation(self, programType, fileName, data, net, batch_size, num_runs, backPropParam, deParam, verbose=True):
+    def cross_validation(self, programType, fileName, data, net, batch_size, num_runs, backPropParam, deParam, psoParam, verbose=True):
         # standardize data
         data = self.pd.standardize_data(data)
         # number of folds in k-folds cross validation
@@ -102,6 +103,9 @@ class Models:
             elif programType == "DE":
                 de = DE(net)
                 de.train(trainData, deParam[0], deParam[1], classOutputs, num_runs, batch_size)
+            elif programType == "PSO":
+                pso = PSO(net)
+                pso.train(trainData, psoParam[0], psoParam[1], psoParam[2], classOutputs, num_runs, batch_size)
 
             if verbose:
                 print("Outputs after training:")
@@ -258,26 +262,32 @@ class Models:
         n_outputs = 4
         batch_size = 15
         num_runs = 4000
+        verbose = True
+        # BP
         lr = 0.001
-        momentum= 0.001      
+        momentum= 0.001   
+        # DE   
         beta = 0.16
         cross_prob= 0.9
-        verbose = True
+        # PSO
+        omega = 0.2
+        cog_1 = 1
+        cog_2 = 2
 
         n_hidden = 0
         layer_nodes = 0
         net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
-        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2], verbose)
         
-        n_hidden = 1
-        layer_nodes = 20
-        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
-        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], verbose)
+        # n_hidden = 1
+        # layer_nodes = 20
+        # net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        # self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], verbose)
         
-        n_hidden = 1
-        layer_nodes = 15
-        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
-        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], verbose)
+        # n_hidden = 1
+        # layer_nodes = 15
+        # net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        # self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], verbose)
 
 
 

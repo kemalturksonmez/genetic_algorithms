@@ -31,8 +31,8 @@ class DE:
     def train(self, train_data, beta, cross_prob, class_outputs, num_runs, batch_size):
         # copy training data so original training data doesn't get shuffled
         temp_train = deepcopy(train_data)
+        # used to decide what stretch of training data should be taken from the shuffled data set
         numOcc = math.ceil(len(train_data)/batch_size)
-        fitness = 10
         # print(temp_train)
         # 
         for i in range(num_runs):
@@ -49,7 +49,7 @@ class DE:
             # curr index
             pop_index = i % self.popLen
             
-            fitness = self.update_network(batch, class_outputs, beta, cross_prob, pop_index, fitness)
+            fitness = self.update_network(batch, class_outputs, beta, cross_prob, pop_index)
         bestFitness = float('inf')
         # pop index
         bestIndex = 0
@@ -71,17 +71,7 @@ class DE:
     # cross_prob - probability of a cross occuring with target vector and mutation
     # pop_index - index of current population
     # fitness - average fitness score from previous weight set
-    def update_network(self, mini_batch, class_outputs, beta, cross_prob, pop_index, fitness):
-    #    #  best index
-    #     bestFitness = 1
-    #     best_index = 0
-    #     # find best fitness
-    #     for index in range(len(self.population)):
-    #         self.net.weights = self.population[index]
-    #         fitness, acc = self.net.get_accuracy(mini_batch, class_outputs)
-    #         if fitness < bestFitness:
-    #             best_index = index
-    #             bestFitness = fitness
+    def update_network(self, mini_batch, class_outputs, beta, cross_prob, pop_index):
         # # set network weights as pop_index
         self.net.weights = self.population[pop_index]
         # # get fitness
@@ -97,22 +87,18 @@ class DE:
         self.net.weights = weight_div
         # get average fitness with new weights
         tempFitness, acc = self.net.get_accuracy(mini_batch, class_outputs)
-        # if offspring performs better than current candidate solution
-        # print(tempFitness, fitness)
 
+        # if offspring performs better than current candidate solution
         if tempFitness < fitness:
-            # print(1)
             # update the fitness
             fitness = tempFitness
             # set the next generation population to be the new offspring
             self.nextGen[pop_index] = weight_div
         # if offspring performed worse
         else:
-            # print(2)
             # self.net.weights = self.population[pop_index]
             self.net.weights = temp
             # set the next generation population to be the same 
-            # self.nextGen[pop_index] = self.population[pop_index]
             self.nextGen[pop_index] = temp
         return fitness
     
