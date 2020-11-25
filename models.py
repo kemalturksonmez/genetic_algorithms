@@ -10,11 +10,23 @@ from genetic import GA
 import numpy as np
 from particleSwarm import PSO
 import matplotlib.pyplot as plt
-# This class contains methods to run and train models on each data set
+''' This class contains methods to run and train models on each data set '''
 class Models:
     def __init__(self):
         self.pd = PD()
 
+    # performs cross validation on a given dataset and method
+    # programType - method of tuning
+    # fileName - name of dataset
+    # data - data
+    # net - network object
+    # batch_size - size of a mini batch
+    # num_runs - number of generations/runs
+    # backPropParam - back propogation parameters
+    # deParam - differential evolution parameters
+    # psoParam - particle swarm optimization parameters
+    # gaParam - genetic algorithm parameters
+    # verbose - boolean used to print out results
     def graphData(self, programType, fileName, data, net, classOutputs, batch_size, num_runs, backPropParam, deParam, psoParam, gaParam, bestIndex):
         # dataset split
         if net.problemType == "classification":
@@ -43,7 +55,7 @@ class Models:
             elif programType == "PSO":
                 pso.train(trainData, psoParam[0], psoParam[1], psoParam[2], psoParam[3], classOutputs, num_runs, batch_size)
             elif programType == "GA":
-                ga.train(trainData, gaParam[0], gaParam[1], classOutputs, batch_size)
+                ga.train(trainData, gaParam[0], gaParam[1], classOutputs, num_runs, batch_size)
 
             loss, acc = net.get_accuracy(testData, classOutputs)
             lossArr.append(loss/len(testData))
@@ -58,6 +70,18 @@ class Models:
         plt.savefig('results/' + fileName + '_' + programType + '_' + str(net.n_hidden) +'_layers_loss.png', dpi=600, bbox_inches='tight')
         plt.clf()
 
+    # performs cross validation on a given dataset and method
+    # programType - method of tuning
+    # fileName - name of dataset
+    # data - data
+    # net - network object
+    # batch_size - size of a mini batch
+    # num_runs - number of generations/runs
+    # backPropParam - back propogation parameters
+    # deParam - differential evolution parameters
+    # psoParam - particle swarm optimization parameters
+    # gaParam - genetic algorithm parameters
+    # verbose - boolean used to print out results
     def cross_validation(self, programType, fileName, data, net, batch_size, num_runs, backPropParam, deParam, psoParam, gaParam, verbose=True):
         # standardize data
         data = self.pd.standardize_data(data)
@@ -113,12 +137,14 @@ class Models:
             elif programType == "DE":
                 de = DE(net)
                 de.train(trainData, deParam[0], deParam[1], classOutputs, num_runs, batch_size)
+            # train PSO
             elif programType == "PSO":
                 pso = PSO(net)
                 pso.train(trainData, psoParam[0], psoParam[1], psoParam[2], psoParam[3], classOutputs, num_runs, batch_size)
+            # train GA
             elif programType == "GA":
                 ga = GA(net)
-                ga.train(trainData, gaParam[0], gaParam[1], classOutputs, batch_size)
+                ga.train(trainData, gaParam[0], gaParam[1], classOutputs, num_runs, batch_size)
 
             if verbose:
                 print("Outputs after training:")
@@ -141,7 +167,7 @@ class Models:
             # create network object
             net = Network(net.n_hidden, net.n_outputs, net.n_inputs, net.layer_nodes, net.problemType, verbose)
         
-        self.graphData(programType, fileName, data, net, classOutputs, batch_size, num_runs, backPropParam, deParam, psoParam, gaParam, bestIndex)
+        # self.graphData(programType, fileName, data, net, classOutputs, batch_size, num_runs, backPropParam, deParam, psoParam, gaParam, bestIndex)
         if verbose:
             print("Before Accuracy average:", beforeAccSum/cv_num)
             print("Before Loss average:", beforeLossSum/cv_num)
@@ -170,7 +196,8 @@ class Models:
         n_inputs = 9
         n_outputs = 2
         batch_size = 21
-        num_runs = 8000
+        # num_runs = 8000
+        num_runs = 1000
         verbose = True
         # BP
         lr = 0.008
@@ -184,7 +211,7 @@ class Models:
         cog_2 = 0.1
         alpha = 0.3
         # GA
-        mutate_p = .3
+        mutate_p = .0005
         selection_rate = .2
 
         n_hidden = 0
@@ -202,10 +229,6 @@ class Models:
         net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
         self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
 
-        # self.cross_validation(data, "classification", "cancer", 0, 2, 9, 0, 7, 40000, 0.008, 0.0001)
-        # self.cross_validation(data, "classification", "cancer", 1, 2, 9, 6, 7, 40000, 0.008, 0.0001)
-        # self.cross_validation(data, "classification", "cancer", 2, 2, 9, 4, 7, 40000, 0.008, 0.0001)
-
 
     ################ glass
     def glass(self, programType):
@@ -219,7 +242,8 @@ class Models:
         n_inputs = 9
         n_outputs = 6
         batch_size = 20
-        num_runs = 10000
+        # num_runs = 10000
+        num_runs = 500
         verbose = True
         # BP
         lr = 0.008
@@ -233,7 +257,7 @@ class Models:
         cog_2 = 0.1
         alpha = 0.3
         # GA
-        mutate_p = .3
+        mutate_p = .0001
         selection_rate = .2
         
         n_hidden = 0
@@ -273,7 +297,8 @@ class Models:
         n_inputs = 35
         n_outputs = 4
         batch_size = 15
-        num_runs = 4000
+        # num_runs = 4000
+        num_runs = 1000
         verbose = True
         # BP
         lr = 0.001
@@ -287,7 +312,7 @@ class Models:
         cog_2 = 0.1
         alpha = 0.3
         # GA
-        mutate_p = .3
+        mutate_p = .0001
         selection_rate = .2
 
         n_hidden = 0
@@ -345,7 +370,7 @@ class Models:
         cog_2 = 0.1
         alpha = 0.3
         # GA
-        mutate_p = .3
+        mutate_p = .00001
         selection_rate = .2
 
         n_hidden = 0
@@ -400,7 +425,7 @@ class Models:
         cog_2 = 0.6
         alpha = 0.99
         # GA
-        mutate_p = .3
+        mutate_p = .00001
         selection_rate = .2
         
         n_hidden = 0
@@ -489,7 +514,7 @@ class Models:
         cog_2 = 0.8
         alpha = 0.93
         # GA
-        mutate_p = .3
+        mutate_p = .00001
         selection_rate = .2
         
         n_hidden = 0

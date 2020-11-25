@@ -6,7 +6,7 @@ import numpy as np
 from copy import deepcopy
 from numpy.random import shuffle
 import math
-
+''' Performs Differential Evolution in order to tune a neural network '''
 class DE:
     # Creates a network object
     # network - network object
@@ -20,7 +20,7 @@ class DE:
         self.nextGen = self.population
 
     
-    # trains network using randomized mini batching
+    # trains network using DE/curr/1/bin
     # train_data - training data
     # beta - percentage of vector difference used
     # cross_prob - probability of a cross occuring with target vector and mutation
@@ -33,8 +33,6 @@ class DE:
         temp_train = deepcopy(train_data)
         # used to decide what stretch of training data should be taken from the shuffled data set
         numOcc = math.ceil(len(train_data)/batch_size)
-        # print(temp_train)
-        # 
         for i in range(num_runs):
             index = (i % numOcc)
             if  index == 0:
@@ -44,12 +42,11 @@ class DE:
             # set new generation
             if (i % self.popLen) == 0:
                 self.population = self.nextGen
-            # rand index
-            # pop_index = int(random.random()*10)
             # curr index
             pop_index = i % self.popLen
             
             fitness = self.update_network(batch, class_outputs, beta, cross_prob, pop_index)
+        # finds the most fit member of the population
         bestFitness = float('inf')
         # pop index
         bestIndex = 0
@@ -71,6 +68,8 @@ class DE:
     # cross_prob - probability of a cross occuring with target vector and mutation
     # pop_index - index of current population
     # fitness - average fitness score from previous weight set
+    # returns:
+    # fitness - fitness of current population member
     def update_network(self, mini_batch, class_outputs, beta, cross_prob, pop_index):
         # # set network weights as pop_index
         self.net.weights = self.population[pop_index]
@@ -105,7 +104,9 @@ class DE:
     # combines trial vector and current candidate solution to find the next candidate solution
     # cross_prob - probability of a cross occuring with target vector and mutation
     # u_vect - trial vector
-    # pop_index - index of current population
+    # pop_index - index of current populations
+    # returns:
+    # weight_div - mutated trial vector
     def cross_over(self, cross_prob, u_vect, pop_index):
         weight_div = deepcopy(self.population[pop_index])
         for i in range(len(u_vect)):
@@ -113,53 +114,37 @@ class DE:
                 for k in range(len(u_vect[i][j])):
                     # if the random value is greater than the crossover probability then 
                     # replace old vector value with new trial value
-                    # print(weight_div[i][j][k])
                     randVal = random.random()
-                    # print(randVal, cross_prob)
-                    # print(randVal > cross_prob)
                     if randVal > cross_prob:
-                        # print(u_vect[i][j][k])
                         weight_div[i][j][k] = u_vect[i][j][k]
-                        # print(weight_div[i][j][k])
-                    # print()
         return weight_div
 
     # creates trial vector
+    # beta - mulitiplier of trial vector
+    # pop_index - current observed population member
+    # returns:
+    # u_vect - trial vector
     def mutate(self, beta, pop_index):
         randVects = [pop_index, pop_index]
-        # randVects = pop_index
 
         # find 3 three distinct random indexes
         while len(randVects) != 4:
             randVectIndex = int(random.random()*self.popLen)
             if not randVectIndex in randVects:
                 randVects.append(randVectIndex)
-                # isEqual = True
-                # for index in randVects:
-                #     if not np.array_equal(self.population[index][0],self.population[randVectIndex][0]):
-                #         isEqual = False
-                # if isEqual:
-                #     randVects.append(randVectIndex)
         # copy without reference
         u_vect = deepcopy(self.population[randVects[2]])
-        # LENGTH
-        # print(len(u_vect[0][0]))
-        # print(len(self.population[randVects[3]][0][0]))
-        # print("STARTING VAL: ", u_vect[0][0][5])
+
         # subtract x_3 from x_2
         for i in range(len(u_vect)):
             u_vect[i] = self.population[randVects[2]][i] - self.population[randVects[3]][i]
-        # print("SUB: ", self.population[randVects[2]][0][0],self.population[randVects[3]][0][0])
-        # print("NEW VAL: ", u_vect[0][0])
+
         # muliply by beta
         for i in range(len(u_vect)):
             u_vect[i] = u_vect[i] * beta
-        # print("MULT: ", u_vect[0][0], beta)
-        # print("NEW VAL: ", u_vect[0][0])
+
         # add u_vect to x_1
         for i in range(len(u_vect)):
             u_vect[i] = self.population[randVects[1]][i] + u_vect[i]
-        # print("ADD: ",self.population[randVects[1]][0][0])
-        # print("NEW VAL: ", u_vect[0][0])
-        # print()
+
         return u_vect

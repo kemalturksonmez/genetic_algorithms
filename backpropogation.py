@@ -1,8 +1,12 @@
+# Authors:
+# Kemal Turksonmez
+# Arash Ajam
 import numpy as np
 from copy import deepcopy
 from numpy.random import shuffle
 import random
 import math
+''' Performs backpropagation in order to tune a neural network '''
 class BackPropogation:
     # Creates a network object
     # network - network

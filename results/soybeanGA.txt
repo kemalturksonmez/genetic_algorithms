@@ -1,0 +1,433 @@
+GA soybean
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  0
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  5.339359070914194
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  3.5530790343103194
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  1
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  5.167758939875287
+Outputs after training:
+Accuracy:  0.75
+Cross Entropy:  0.6892325439090073
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  2
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  7.300708753420369
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  1.2460652123096998
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  3
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  6.74637875893482
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  1.4386135132218656
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  4
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  7.94207025521658
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  1.0164442404064153
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  5
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  6.416241969337225
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  2.719164486389097
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  6
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  3.8821417278103096
+Outputs after training:
+Accuracy:  0.0
+Cross Entropy:  3.600925410158122
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  7
+Outputs before training:
+Accuracy:  0.5
+Cross Entropy:  6.339243336191767
+Outputs after training:
+Accuracy:  0.75
+Cross Entropy:  0.7751437233472918
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  8
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  5.482756216657723
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  2.349039027090761
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Running iteration:  9
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  4.13258603466197
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  1.8164011291672735
+
+Number of inputs:  35
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  4
+Network Properties:  [35, 4]
+Before Accuracy average: 0.075
+Before Loss average: 5.874924506302024
+Before Best Loss:  3.8821417278103096
+Before Best accuracy: 0.5
+After Accuracy average: 0.4
+After Loss average: 1.9204108320309854
+After Best Loss:  0.6892325439090073
+After Best accuracy: 0.75
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  0
+Outputs before training:
+Accuracy:  0.5
+Cross Entropy:  3.81239875246731
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  2.600420262810522
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  1
+Outputs before training:
+Accuracy:  0.5
+Cross Entropy:  1.4037114665879866
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  2.1341787194872373
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  2
+Outputs before training:
+Accuracy:  0.5
+Cross Entropy:  2.0386778521300766
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  1.7328265142033006
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  3
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  2.1218953496989146
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  1.644166776774839
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  4
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  1.860470953552626
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  1.8493160509860975
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  5
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  4.98053058873832
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  3.447726785242467
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  6
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  5.33292997604507
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  2.150358712469127
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  7
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  3.5062050834213965
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  2.7074429052883264
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  8
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  3.270844344057453
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  1.4052312508610763
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Running iteration:  9
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  1.5744287140143003
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  0.7884953359472794
+
+Number of inputs:  35
+Number of hidden layer nodes:  20
+Number of hidden layers:  1
+Number of outputs:  4
+Network Properties:  [35, 20, 4]
+Before Accuracy average: 0.275
+Before Loss average: 2.9902093080713454
+Before Best Loss:  1.4037114665879866
+Before Best accuracy: 0.5
+After Accuracy average: 0.35
+After Loss average: 2.046016331407027
+After Best Loss:  0.7884953359472794
+After Best accuracy: 0.5
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  0
+Outputs before training:
+Accuracy:  0.5
+Cross Entropy:  1.8137957328805334
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  1.5487518166342347
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  1
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  2.3368012937548803
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  1.7221781068934254
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  2
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  2.93667405097281
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  1.4183499048519672
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  3
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  2.59437025561134
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  2.475310236960114
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  4
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  3.743703566271585
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  2.107670198236677
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  5
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  2.2129787824582703
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  1.4944445683784646
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  6
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  2.3428241753594956
+Outputs after training:
+Accuracy:  0.75
+Cross Entropy:  1.2810625048656754
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  7
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  4.505222924681674
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  1.569378715561329
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  8
+Outputs before training:
+Accuracy:  0.0
+Cross Entropy:  2.0207323914610154
+Outputs after training:
+Accuracy:  0.25
+Cross Entropy:  1.5275330264759295
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Running iteration:  9
+Outputs before training:
+Accuracy:  0.25
+Cross Entropy:  2.048965323140113
+Outputs after training:
+Accuracy:  0.5
+Cross Entropy:  1.219010525890094
+
+Number of inputs:  35
+Number of hidden layer nodes:  15
+Number of hidden layers:  2
+Number of outputs:  4
+Network Properties:  [35, 15, 15, 4]
+Before Accuracy average: 0.2
+Before Loss average: 2.6556068496591716
+Before Best Loss:  1.8137957328805334
+Before Best accuracy: 0.5
+After Accuracy average: 0.375
+After Loss average: 1.636368960474791
+After Best Loss:  1.219010525890094
+After Best accuracy: 0.75
+

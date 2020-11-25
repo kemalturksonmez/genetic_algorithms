@@ -1,0 +1,373 @@
+GA abalone
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  0
+Outputs before training:
+Mean Squared Error:  3.8145540191238765
+Outputs after training:
+Mean Squared Error:  2.3494516933375187
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  1
+Outputs before training:
+Mean Squared Error:  3.5944221686240154
+Outputs after training:
+Mean Squared Error:  2.0401498439366117
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  2
+Outputs before training:
+Mean Squared Error:  25.633220745708435
+Outputs after training:
+Mean Squared Error:  2.31969645089417
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  3
+Outputs before training:
+Mean Squared Error:  1.7366076757760862
+Outputs after training:
+Mean Squared Error:  1.6905856443806218
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  4
+Outputs before training:
+Mean Squared Error:  5.601867069725515
+Outputs after training:
+Mean Squared Error:  1.8115046283577896
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  5
+Outputs before training:
+Mean Squared Error:  11.395785732800714
+Outputs after training:
+Mean Squared Error:  1.8989888610471441
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  6
+Outputs before training:
+Mean Squared Error:  4.260476462542213
+Outputs after training:
+Mean Squared Error:  1.827063902762735
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  7
+Outputs before training:
+Mean Squared Error:  14.004993356226278
+Outputs after training:
+Mean Squared Error:  2.4335047277573114
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  8
+Outputs before training:
+Mean Squared Error:  2.8575427124841664
+Outputs after training:
+Mean Squared Error:  3.3075706873750477
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Running iteration:  9
+Outputs before training:
+Mean Squared Error:  15.32581061073275
+Outputs after training:
+Mean Squared Error:  2.1908234152772117
+
+Number of inputs:  8
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [8, 1]
+Before Accuracy average: 0.0
+Before Loss average: 8.822528055374404
+Before Best Loss:  1.7366076757760862
+Before Best accuracy: 0
+After Accuracy average: 0.0
+After Loss average: 2.186933985512616
+After Best Loss:  1.6905856443806218
+After Best accuracy: 0
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  0
+Outputs before training:
+Mean Squared Error:  7.569478433351086
+Outputs after training:
+Mean Squared Error:  0.8535474504496705
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  1
+Outputs before training:
+Mean Squared Error:  7.934559263418659
+Outputs after training:
+Mean Squared Error:  0.5988592691863353
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  2
+Outputs before training:
+Mean Squared Error:  1.9870896543404304
+Outputs after training:
+Mean Squared Error:  0.7272552386884769
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  3
+Outputs before training:
+Mean Squared Error:  2.859972699920756
+Outputs after training:
+Mean Squared Error:  0.6699884429290053
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  4
+Outputs before training:
+Mean Squared Error:  1.4427719717984968
+Outputs after training:
+Mean Squared Error:  0.8077728741834705
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  5
+Outputs before training:
+Mean Squared Error:  1.642532270161946
+Outputs after training:
+Mean Squared Error:  1.1423605463899582
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  6
+Outputs before training:
+Mean Squared Error:  5.271366424999885
+Outputs after training:
+Mean Squared Error:  0.6734597830619017
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  7
+Outputs before training:
+Mean Squared Error:  3.138140137171281
+Outputs after training:
+Mean Squared Error:  0.6414027095733452
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  8
+Outputs before training:
+Mean Squared Error:  3.509404459995664
+Outputs after training:
+Mean Squared Error:  1.4197091320483468
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Running iteration:  9
+Outputs before training:
+Mean Squared Error:  0.8755960966675401
+Outputs after training:
+Mean Squared Error:  1.1742121296467067
+
+Number of inputs:  8
+Number of hidden layer nodes:  5
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [8, 5, 1]
+Before Accuracy average: 0.0
+Before Loss average: 3.6230911411825746
+Before Best Loss:  0.8755960966675401
+Before Best accuracy: 0
+After Accuracy average: 0.0
+After Loss average: 0.8708567576157217
+After Best Loss:  0.5988592691863353
+After Best accuracy: 0
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  0
+Outputs before training:
+Mean Squared Error:  0.8361271345449848
+Outputs after training:
+Mean Squared Error:  0.7337497941075434
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  1
+Outputs before training:
+Mean Squared Error:  4.083654252596981
+Outputs after training:
+Mean Squared Error:  0.6384445333278224
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  2
+Outputs before training:
+Mean Squared Error:  10.716304431924858
+Outputs after training:
+Mean Squared Error:  0.6451062205881363
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  3
+Outputs before training:
+Mean Squared Error:  1.1585435093710736
+Outputs after training:
+Mean Squared Error:  0.5733835662328001
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  4
+Outputs before training:
+Mean Squared Error:  2.79640646423881
+Outputs after training:
+Mean Squared Error:  0.5821755086090433
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  5
+Outputs before training:
+Mean Squared Error:  0.9204967084599341
+Outputs after training:
+Mean Squared Error:  0.7063121811750078
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  6
+Outputs before training:
+Mean Squared Error:  0.6447059784039463
+Outputs after training:
+Mean Squared Error:  0.7150583495322563
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  7
+Outputs before training:
+Mean Squared Error:  2.684843368064657
+Outputs after training:
+Mean Squared Error:  0.9451431721603688
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  8
+Outputs before training:
+Mean Squared Error:  3.1295198604156758
+Outputs after training:
+Mean Squared Error:  0.9588120027545204
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Running iteration:  9
+Outputs before training:
+Mean Squared Error:  1.5542080764083812
+Outputs after training:
+Mean Squared Error:  0.7308552126346766
+
+Number of inputs:  8
+Number of hidden layer nodes:  3
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [8, 3, 3, 1]
+Before Accuracy average: 0.0
+Before Loss average: 2.8524809784429297
+Before Best Loss:  0.6447059784039463
+Before Best accuracy: 0
+After Accuracy average: 0.0
+After Loss average: 0.7229040541122174
+After Best Loss:  0.5733835662328001
+After Best accuracy: 0
+

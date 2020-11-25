@@ -1,0 +1,223 @@
+PSO forestfires
+Number of inputs:  14
+Number of hidden layer nodes:  0
+Number of hidden layers:  0
+Number of outputs:  1
+Network Properties:  [14, 1]
+Running iteration:  0
+Outputs before training:
+Mean Squared Error:  1015.3357160120909
+Outputs after training:
+Mean Squared Error:  901.3546604889941
+
+Running iteration:  1
+Outputs before training:
+Mean Squared Error:  312.911853112621
+Outputs after training:
+Mean Squared Error:  332.0934813994367
+
+Running iteration:  2
+Outputs before training:
+Mean Squared Error:  380.00443145371156
+Outputs after training:
+Mean Squared Error:  380.00708237327956
+
+Running iteration:  3
+Outputs before training:
+Mean Squared Error:  591.7951506399571
+Outputs after training:
+Mean Squared Error:  591.7907536109052
+
+Running iteration:  4
+Outputs before training:
+Mean Squared Error:  641.1139581906396
+Outputs after training:
+Mean Squared Error:  641.1036354767305
+
+Running iteration:  5
+Outputs before training:
+Mean Squared Error:  11680.085916438138
+Outputs after training:
+Mean Squared Error:  11801.85543432391
+
+Running iteration:  6
+Outputs before training:
+Mean Squared Error:  892.7278869154934
+Outputs after training:
+Mean Squared Error:  921.1251888264871
+
+Running iteration:  7
+Outputs before training:
+Mean Squared Error:  1807.6400729219306
+Outputs after training:
+Mean Squared Error:  1807.6468908801885
+
+Running iteration:  8
+Outputs before training:
+Mean Squared Error:  23402.93736001668
+Outputs after training:
+Mean Squared Error:  23402.17656017184
+
+Running iteration:  9
+Outputs before training:
+Mean Squared Error:  1752.9970540762788
+Outputs after training:
+Mean Squared Error:  1753.0880957803017
+
+Before Accuracy average: 0.0
+Before Loss average: 4247.7549399777545
+Before Best Loss:  312.911853112621
+Before Best accuracy: 0
+After Accuracy average: 0.0
+After Loss average: 4253.224178333207
+After Best Loss:  332.0934813994367
+After Best accuracy: 0
+
+Number of inputs:  14
+Number of hidden layer nodes:  6
+Number of hidden layers:  1
+Number of outputs:  1
+Network Properties:  [14, 6, 1]
+Running iteration:  0
+Outputs before training:
+Mean Squared Error:  931.5774361201682
+Outputs after training:
+Mean Squared Error:  866.7550307235401
+
+Running iteration:  1
+Outputs before training:
+Mean Squared Error:  276.6431351083007
+Outputs after training:
+Mean Squared Error:  276.63484505828853
+
+Running iteration:  2
+Outputs before training:
+Mean Squared Error:  336.9093021321695
+Outputs after training:
+Mean Squared Error:  336.90210802298566
+
+Running iteration:  3
+Outputs before training:
+Mean Squared Error:  559.5489994690257
+Outputs after training:
+Mean Squared Error:  559.5314543590096
+
+Running iteration:  4
+Outputs before training:
+Mean Squared Error:  591.2626074380391
+Outputs after training:
+Mean Squared Error:  579.9264323186156
+
+Running iteration:  5
+Outputs before training:
+Mean Squared Error:  11675.384506277373
+Outputs after training:
+Mean Squared Error:  11675.31383499926
+
+Running iteration:  6
+Outputs before training:
+Mean Squared Error:  875.0179034001325
+Outputs after training:
+Mean Squared Error:  865.8153875172867
+
+Running iteration:  7
+Outputs before training:
+Mean Squared Error:  1713.9378284537506
+Outputs after training:
+Mean Squared Error:  1726.0896120847528
+
+Running iteration:  8
+Outputs before training:
+Mean Squared Error:  23354.87812588171
+Outputs after training:
+Mean Squared Error:  23354.95779723183
+
+Running iteration:  9
+Outputs before training:
+Mean Squared Error:  1674.018476744648
+Outputs after training:
+Mean Squared Error:  1674.0244738385236
+
+Before Accuracy average: 0.0
+Before Loss average: 4198.917832102532
+Before Best Loss:  276.6431351083007
+Before Best accuracy: 0
+After Accuracy average: 0.0
+After Loss average: 4191.595097615409
+After Best Loss:  276.63484505828853
+After Best accuracy: 0
+
+Number of inputs:  14
+Number of hidden layer nodes:  4
+Number of hidden layers:  2
+Number of outputs:  1
+Network Properties:  [14, 4, 4, 1]
+Running iteration:  0
+Outputs before training:
+Mean Squared Error:  944.8220706156301
+Outputs after training:
+Mean Squared Error:  869.9259105360102
+
+Running iteration:  1
+Outputs before training:
+Mean Squared Error:  275.496291482041
+Outputs after training:
+Mean Squared Error:  275.512186700797
+
+Running iteration:  2
+Outputs before training:
+Mean Squared Error:  337.73477915267745
+Outputs after training:
+Mean Squared Error:  336.62456860918604
+
+Running iteration:  3
+Outputs before training:
+Mean Squared Error:  549.25002820515
+Outputs after training:
+Mean Squared Error:  549.2594353293613
+
+Running iteration:  4
+Outputs before training:
+Mean Squared Error:  581.5064541244255
+Outputs after training:
+Mean Squared Error:  581.5050798115716
+
+Running iteration:  5
+Outputs before training:
+Mean Squared Error:  11733.084101673145
+Outputs after training:
+Mean Squared Error:  11733.039260212141
+
+Running iteration:  6
+Outputs before training:
+Mean Squared Error:  871.7369772093231
+Outputs after training:
+Mean Squared Error:  849.294620413551
+
+Running iteration:  7
+Outputs before training:
+Mean Squared Error:  1694.7935679215518
+Outputs after training:
+Mean Squared Error:  1694.812581146466
+
+Running iteration:  8
+Outputs before training:
+Mean Squared Error:  23331.295505197697
+Outputs after training:
+Mean Squared Error:  23331.371484171123
+
+Running iteration:  9
+Outputs before training:
+Mean Squared Error:  1666.430208830649
+Outputs after training:
+Mean Squared Error:  1666.4136495164464
+
+Before Accuracy average: 0.0
+Before Loss average: 4198.61499844123
+Before Best Loss:  275.496291482041
+Before Best accuracy: 0
+After Accuracy average: 0.0
+After Loss average: 4188.775877644665
+After Best Loss:  275.512186700797
+After Best accuracy: 0
+
