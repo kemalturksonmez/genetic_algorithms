@@ -9,34 +9,42 @@ class GA:
         self.net = network
         self.population = [self.net.weights]
         # generate 9 more arrays with similar structures as the weights vector
-        for i in range(1, 10):
+        for i in range(1, 30):
             self.population.append([np.random.randn(y, x) for x, y in zip(self.net.net_props[:-1], self.net.net_props[1:])])
-        print(self.population[0])
-        self.crossover(self.population)
+        # print(self.population[0])
+        # self.crossover(self.population)
     # def create_population(pop_n):
         # for n in pop_n:
             # create network
 
 
-    def fitness(networks):
-        # fitness = dict()
-        # for net in networks:
-        #     fitness.add(net, net.accuracy)
-        # fitness.sort()
-        # return fitness
+    def fitness(self, batch, class_outputs):
+        fitness = list()
+        total=0
+        for w in self.population:
+            self.net.weights = w
+            fit, accuracy = self.net.get_accuracy(batch, class_outputs)
+            fitness.append((self.net.weights, fit))
+            total += fit
+        avg = total/len(self.population)
+        fitness.sort(key= lambda x:x[1], reverse=True)
+        return avg, fitness
 
-    def selection(self, fitness, networks, rate):
-        # length = len(networks)
-        # selection = fitness.getTopRate()
-        # return selection
+    def selection(self, fitness, rate):
+        length = len(self.population)
+        top = int(length * rate)
+        # print(top)
+        selection = [i[0] for i in fitness[:top]]
+        # print(selection)
+        return selection
         
-    def crossover(self, selection):
+    def crossover(self, selection, fit_avg):
         length = len(selection)
         rand1 = random.randint(0, len(selection)-1)
         rand2 = random.randint(0, len(selection)-1)
         parent1 = selection[rand1]
         parent2 = selection[rand2]
-        print(rand1, " \n parent1:", parent1, "\n parent2:", parent2)
+        # print(rand1, " \n parent1:", parent1, "\n parent2:", parent2)
 
         w1 = np.array(parent1)
         w2 = np.array(parent2)
@@ -66,6 +74,7 @@ class GA:
         # print("child \n", child_weights)
         self.mutate(child_weights, .2)
         # print("mutated \n", child_weights)
+
         return child_weights
 
 
@@ -84,3 +93,35 @@ class GA:
                     if(rand_p < mutate_p):
                         w = w + rand_value
                         weights[i][j][k] = w
+
+    def generate(self, batch, class_outputs):
+        count = 0
+        convergence = False
+        while(not convergence):
+            count+=1
+            print("Genration ", count)
+            avg, fitness = self.fitness(batch, class_outputs)
+            new_select = self.selection(fitness, .2)
+            childs = self.crossover(new_select, avg)
+            self.population.append(childs)
+            avg, fitness = self.fitness(batch, class_outputs)
+            print('avg', avg)
+            if(avg > 9 or count> 1000):
+                convergence = True
+            print("fittest", fitness[0][1])
+            print("second fittest", fitness[1][1])
+        fitness, avg = self.fitness(batch, class_outputs)
+        # print(fitness, avg)
+
+    def train(self, train_data, class_outputs, batch_size):
+        # copy training data so original training data doesn't get shuffled
+        temp_train = deepcopy(train_data)
+        # shuffle array with numpy shuffle
+        shuffle(temp_train)
+        batch = []
+        for j in range(batch_size):
+            index = int(random.random()*len((temp_train) + 1))
+            # print(index)
+            batch.append(temp_train[index])
+        # update network
+        self.generate(batch, class_outputs)
