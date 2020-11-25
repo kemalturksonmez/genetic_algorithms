@@ -2,6 +2,7 @@ import numpy as np
 from copy import deepcopy
 from numpy.random import shuffle
 import random
+import math
 class BackPropogation:
     # Creates a network object
     # network - network
@@ -16,20 +17,31 @@ class BackPropogation:
     # lr - learning rate of back propogation
     # momentum - momentum of back propogation
     def stochastic_GD(self, train_data, class_outputs, batch_size, num_runs, lr, momentum=0):
+        # # copy training data so original training data doesn't get shuffled
+        # temp_train = deepcopy(train_data)
+        # for i in range(num_runs):
+        #     # shuffle array with numpy shuffle
+        #     shuffle(temp_train)
+        #     batch = []
+        #     for j in range(batch_size):
+        #         index = int(random.random()*len((temp_train) + 1))
+        #         # print(index)
+        #         batch.append(temp_train[index])
+        #         # batch.append(temp_train[j])
+        #     # update network
+        #     self.update_network(batch, class_outputs, lr, momentum)
         # copy training data so original training data doesn't get shuffled
+        # print(temp_train)
         temp_train = deepcopy(train_data)
+        numOcc = math.ceil(len(train_data)/batch_size)
         for i in range(num_runs):
+            index = (i % numOcc)
+            if  index == 0:
+                shuffle(temp_train)
             # shuffle array with numpy shuffle
-            shuffle(temp_train)
-            batch = []
-            for j in range(batch_size):
-                index = int(random.random()*len((temp_train) + 1))
-                # print(index)
-                batch.append(temp_train[index])
-                # batch.append(temp_train[j])
-            # update network
-            self.update_network(batch, class_outputs, lr, momentum)
+            batch = temp_train[index * batch_size : (index * batch_size) + batch_size]
 
+            self.update_network(batch, class_outputs, lr, momentum)
     # performs backpropogation on a minibatch and sums outputs
     # batch - mini batch
     # class_outputs - contains a list of class outputs for classification problems

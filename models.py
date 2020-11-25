@@ -6,27 +6,59 @@ from backpropogation import BackPropogation
 from diffevolution import DE
 from genetic import GA
 from process_data import PD
+from genetic import GA
 import numpy as np
+from particleSwarm import PSO
+import matplotlib.pyplot as plt
 # This class contains methods to run and train models on each data set
 class Models:
     def __init__(self):
         self.pd = PD()
 
-    def graphData(self, n_hidden, n_outputs, n_inputs, layer_nodes, problemType, classOutputs, batch_size, num_runs, lr, momentum, bestIndex):
+    def graphData(self, programType, fileName, data, net, classOutputs, batch_size, num_runs, backPropParam, deParam, psoParam, gaParam, bestIndex):
         # dataset split
-        if problemType == "classification":
+        if net.problemType == "classification":
             trainData, testData = self.pd.stratifiedSplit(data, bestIndex)
         else:
             trainData, testData = self.pd.regressiveSplit(data, bestIndex) 
-        # create new network object
-        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType)
-        backprop = BackPropogation(net)
-        backprop.stochastic_GD(trainData, classOutputs, batch_size, num_runs, lr, momentum)
-
+        
+        if programType == "BP":
+            bp = BackPropogation(net)
+        elif programType == "DE":
+            de = DE(net)
+        elif programType == "PSO":
+            pso = PSO(net)
+        elif programType == "GA":
+            ga = GA(net)
         # graph network
-        net.graph(fileName, trainData, testData, classOutputs, batch_size, num_runs, lr, momentum)
+        size = 400
+        numPoints = int(num_runs/size)
+        lossArr = []
+        for i in range(numPoints):
+            loss = 0
+            if programType == "BP":
+                bp.stochastic_GD(trainData, classOutputs, batch_size, size, backPropParam[0], backPropParam[1])
+            elif programType == "DE":
+                de.train(trainData, deParam[0], deParam[1], classOutputs, size, batch_size)
+            elif programType == "PSO":
+                pso.train(trainData, psoParam[0], psoParam[1], psoParam[2], psoParam[3], classOutputs, num_runs, batch_size)
+            elif programType == "GA":
+                ga.train(trainData, gaParam[0], gaParam[1], classOutputs, batch_size)
 
-    def cross_validation(self, data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, beta=0, cross_prob=0, verbose=True):
+            loss, acc = net.get_accuracy(testData, classOutputs)
+            lossArr.append(loss/len(testData))
+
+        error_name = "Cross Entropy Loss"
+        if net.problemType == "regression":
+            error_name = " Mean Squared Error"
+        plt.plot(lossArr)
+        plt.xlabel("Training Iteration [Multiplied by " + str(size) + "]")
+        plt.ylabel(error_name)
+        plt.title('Error vs Training Iteration on ' + str(fileName) + " With " + str(net.n_hidden) + " Layers", fontsize=12)
+        plt.savefig('results/' + fileName + '_' + programType + '_' + str(net.n_hidden) +'_layers_loss.png', dpi=600, bbox_inches='tight')
+        plt.clf()
+
+    def cross_validation(self, programType, fileName, data, net, batch_size, num_runs, backPropParam, deParam, psoParam, gaParam, verbose=True):
         # standardize data
         data = self.pd.standardize_data(data)
         # number of folds in k-folds cross validation
@@ -34,12 +66,12 @@ class Models:
         # class outputs contains all the potential classes in a classification data set
         classOutputs = []
         # get all the potential classes
-        if problemType == "classification":
+        if net.problemType == "classification":
             data = self.pd.split_by_class(data)
             for key in data:
                 classOutputs.append(key)
         # convert each element to it's own array
-        data = self.pd.convert_to_single_numpy(data, problemType)
+        data = self.pd.convert_to_single_numpy(data, net.problemType)
         beforeAccSum, beforeLossSum, beforeBestIndex = 0, 0, 0
         afterAccSum, afterLossSum, afterBestIndex = 0, 0, 0
         afterBestLoss = float('inf')
@@ -47,24 +79,22 @@ class Models:
         beforeBestAcc = 0
         afterBestAcc = 0
         error_name = "Cross Entropy: "
-        if problemType == "regression":
+        if net.problemType == "regression":
             error_name = "Mean Squared Error: "
         # get array of outputs
         for i in range(cv_num):
             if verbose:
                 print("Running iteration: ", i)
             # dataset split
-            if problemType == "classification":
+            if net.problemType == "classification":
                 trainData, testData = self.pd.stratifiedSplit(data, i)
             else:
                 trainData, testData = self.pd.regressiveSplit(data, i) 
            
-            # network object
-            net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
             if verbose:
                 print("Outputs before training:")
             loss, acc = net.get_accuracy(testData, classOutputs)
-            if problemType == "classification":
+            if net.problemType == "classification":
                 if verbose:
                     print("Accuracy: ", acc)
                 beforeAccSum += acc
@@ -76,19 +106,26 @@ class Models:
             if verbose:    
                 print(error_name, loss)
             # train back propogation
-            # backprop = BackPropogation(net)
-            # backprop.stochastic_GD(trainData, classOutputs, batch_size, num_runs, lr, momentum)
-
+            if programType == "BP":     
+                backprop = BackPropogation(net)
+                backprop.stochastic_GD(trainData, classOutputs, batch_size, num_runs, backPropParam[0], backPropParam[1])
             # train DE
-            # de = DE(net)
-            # de.train(trainData, beta, cross_prob, classOutputs, num_runs, batch_size, loss)
-            # if verbose:
-            #     print("Outputs after training:")
-            # loss, acc = net.get_accuracy(testData, classOutputs)
+            elif programType == "DE":
+                de = DE(net)
+                de.train(trainData, deParam[0], deParam[1], classOutputs, num_runs, batch_size)
+            elif programType == "PSO":
+                pso = PSO(net)
+                pso.train(trainData, psoParam[0], psoParam[1], psoParam[2], psoParam[3], classOutputs, num_runs, batch_size)
+            elif programType == "GA":
+                ga = GA(net)
+                ga.train(trainData, gaParam[0], gaParam[1], classOutputs, batch_size)
 
-            ga = GA(net)
-            ga.train(trainData, classOutputs, batch_size)
-            if problemType == "classification":
+            if verbose:
+                print("Outputs after training:")
+            loss, acc = net.get_accuracy(testData, classOutputs)
+
+           
+            if net.problemType == "classification":
                 if verbose:
                     print("Accuracy: ", acc)
                 afterAccSum += acc
@@ -101,8 +138,10 @@ class Models:
             if verbose:
                 print(error_name, loss)
                 print()
+            # create network object
+            net = Network(net.n_hidden, net.n_outputs, net.n_inputs, net.layer_nodes, net.problemType, verbose)
         
-        # self.graphData(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, classOutputs, batch_size, num_runs, lr, momentum, bestIndex)
+        self.graphData(programType, fileName, data, net, classOutputs, batch_size, num_runs, backPropParam, deParam, psoParam, gaParam, bestIndex)
         if verbose:
             print("Before Accuracy average:", beforeAccSum/cv_num)
             print("Before Loss average:", beforeLossSum/cv_num)
@@ -115,29 +154,8 @@ class Models:
             print()
         return afterLossSum/cv_num
 
-    def tuneDE(self, data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, beta_range, cross_range):
-        best_beta = 1
-        best_cross_prob = 0.5
-        best_loss = self.cross_validation(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, best_beta, best_cross_prob, False)
-        for i in range(3):
-            for j in range(3):
-                beta = ((beta_range[1]- beta_range[0])/3) * i +  beta_range[0]
-                cross_prob = ((cross_range[1]-cross_range[0])/3) * j + cross_range[0]
-                loss = self.cross_validation(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, beta, cross_prob, False)
-                if loss < best_loss:
-                    best_beta = beta
-                    best_cross_prob = cross_prob
-        print("Beta Range", beta_range)
-        print("Best Beta: ", best_beta)
-        print("Cross Range", cross_range)
-        print("Best Cross Prob: ", best_cross_prob)
-        print("Best Loss Avg Avg: ", best_loss)
-        beta_range = (beta_range[1] - beta_range[0])/3
-        cross_prob = (cross_range[1] - cross_range[0])/3
-        self.tuneDE(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, [best_beta - beta_range,best_beta + beta_range], [best_cross_prob - cross_prob,best_cross_prob + cross_prob])
-
     ################ breast cancer
-    def cancer(self):
+    def cancer(self, programType):
         data = 'data/breast-cancer-wisconsin.data'
         with open(data) as inp:
             text = [l.replace("?", "-1") for l in inp]
@@ -147,28 +165,99 @@ class Models:
         # remove missing rows
         data = self.pd.remove_missing(data)
         # Run cross validation
-        # self.cross_validation(data, "classification", "cancer", 2, 2, 9, 4, 7, 40000, 0.002, 0.001)
+        problemType = "classification"
+        fileName = "cancer"
+        n_inputs = 9
+        n_outputs = 2
+        batch_size = 21
+        num_runs = 8000
+        verbose = True
+        # BP
+        lr = 0.008
+        momentum = 0.0001   
+        # DE   
+        beta = 0.07
+        cross_prob= 0.90
+        # PSO
+        omega = 0.001
+        cog_1 = 0.01
+        cog_2 = 0.1
+        alpha = 0.3
+        # GA
+        mutate_p = .3
+        selection_rate = .2
 
-        self.cross_validation(data, "classification", "cancer", 0, 2, 9, 0, 7, 40000, 0.008, 0.0001)
-        self.cross_validation(data, "classification", "cancer", 1, 2, 9, 6, 7, 40000, 0.008, 0.0001)
-        self.cross_validation(data, "classification", "cancer", 2, 2, 9, 4, 7, 40000, 0.008, 0.0001)
+        n_hidden = 0
+        layer_nodes = 0
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
+        n_hidden = 1
+        layer_nodes = 6
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
+        n_hidden = 2
+        layer_nodes = 4
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
+        # self.cross_validation(data, "classification", "cancer", 0, 2, 9, 0, 7, 40000, 0.008, 0.0001)
+        # self.cross_validation(data, "classification", "cancer", 1, 2, 9, 6, 7, 40000, 0.008, 0.0001)
+        # self.cross_validation(data, "classification", "cancer", 2, 2, 9, 4, 7, 40000, 0.008, 0.0001)
+
 
     ################ glass
-    def glass(self):
+    def glass(self, programType):
         data = 'data/glass.data'
         data = np.loadtxt(data, delimiter=",")
         # remove id
         data = self.pd.remove_first_column(data)
         # Run cross validation
-        # self.cross_validation(data, "classification", "glass", 2, 6, 9, 7, 8, 20000, 0.005, 0.002)
+        problemType = "classification"
+        fileName = "glass"
+        n_inputs = 9
+        n_outputs = 6
+        batch_size = 20
+        num_runs = 10000
+        verbose = True
+        # BP
+        lr = 0.008
+        momentum = 0.002      
+        # DE
+        beta = 0.12
+        cross_prob= 0.90
+        # PSO
+        omega = 0.15
+        cog_1 = 0.01
+        cog_2 = 0.1
+        alpha = 0.3
+        # GA
+        mutate_p = .3
+        selection_rate = .2
+        
+        n_hidden = 0
+        layer_nodes = 0
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
 
-        self.cross_validation(data, "classification", "glass", 0, 6, 9, 0, 8, 20000, 0.008, 0.002)
-        self.cross_validation(data, "classification", "glass", 1, 6, 9, 7, 8, 20000, 0.008, 0.002)
-        self.cross_validation(data, "classification", "glass", 2, 6, 9, 4, 8, 20000, 0.008, 0.002)
+        n_hidden = 1
+        layer_nodes = 7
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
+        n_hidden = 2
+        layer_nodes = 4
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
+        # self.cross_validation(data, "classification", "glass", 0, 6, 9, 0, 8, 20000, 0.008, 0.002)
+        # self.cross_validation(data, "classification", "glass", 1, 6, 9, 7, 8, 20000, 0.008, 0.002)
+        # self.cross_validation(data, "classification", "glass", 2, 6, 9, 4, 8, 20000, 0.008, 0.002)
 
 
     ################ soybean
-    def soybean(self):
+    def soybean(self, programType):
         data = 'data/soybean-small.data'
         text = []
         with open(data) as inp:
@@ -183,27 +272,43 @@ class Models:
         fileName = "soybean"
         n_inputs = 35
         n_outputs = 4
-        num_runs = 10000
-        # self.cross_validation(data, "classification", "soybean", 2, 4, 35, 15, 4, 25, 1)
+        batch_size = 15
+        num_runs = 4000
+        verbose = True
+        # BP
+        lr = 0.001
+        momentum= 0.001   
+        # DE   
+        beta = 0.18
+        cross_prob= 0.9
+        # PSO
+        omega = 0.001
+        cog_1 = 0.01
+        cog_2 = 0.1
+        alpha = 0.3
+        # GA
+        mutate_p = .3
+        selection_rate = .2
 
-        # self.cross_validation(data, "classification", "soybean", 0, 4, 35, 0, 3, 10000, 0.001, 0.001)
-        # self.cross_validation(data, "classification", "soybean", 1, 4, 35, 20, 3, 10000, 0.001,0.001)
-        # self.cross_validation(data, "classification", "soybean", 2, 4, 35, 15, 3, 10000, 0.001, 0.001)
+        n_hidden = 0
+        layer_nodes = 0
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+        
+        n_hidden = 1
+        layer_nodes = 20
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
         
         n_hidden = 2
-        layer_nodes = 8
-        batch_size = 15
-        num_runs = 400
-        lr = 0.001
-        momentum= 0.001
-        beta = 1
-        cross_prob= 0.5
-        self.tuneDE(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, [0,2], [0.8,1])
-        # self.cross_validation(data, problemType, fileName, n_hidden, n_outputs, n_inputs, layer_nodes, batch_size, num_runs, lr, momentum, beta, cross_prob)
+        layer_nodes = 15
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
 
 
     ################ Abalone
-    def abalone(self):
+    def abalone(self, programType):
         data = 'data/abalone.data'
         IntToClass = {"0" : "M", "1" : "F", "2" : "I"}
         text = []
@@ -221,14 +326,50 @@ class Models:
         # # remove missing rows
         # data = self.pd.remove_missing(data)
         # Run cross validation
+        problemType = "regression"
+        fileName = "abalone"
+        n_inputs = 8
+        n_outputs = 1
+        batch_size = 55
+        num_runs = 5000
+        verbose = True
+        # BP
+        lr = 0.001
+        momentum= 0.01      
+        # DE
+        beta = 0.16
+        cross_prob= 0.9
+        # PSO
+        omega = 0.001
+        cog_1 = 0.01
+        cog_2 = 0.1
+        alpha = 0.3
+        # GA
+        mutate_p = .3
+        selection_rate = .2
+
+        n_hidden = 0
+        layer_nodes = 0
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
+        n_hidden = 1
+        layer_nodes = 5
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p],verbose)
+
+        n_hidden = 2
+        layer_nodes = 3
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p],verbose)
+
+        # self.cross_validation(data, "regression", "abalone", 0, 1, 8, 0, 55, 10000, 0.00005, 0.01)
         # self.cross_validation(data, "regression", "abalone", 1, 1, 8, 5, 55, 10000, 0.00005, 0.01)
-        self.cross_validation(data, "regression", "abalone", 0, 1, 8, 5, 55, 10000, 0.00005, 0.01)
-        self.cross_validation(data, "regression", "abalone", 1, 1, 8, 5, 55, 10000, 0.00005, 0.01)
-        self.cross_validation(data, "regression", "abalone", 2, 1, 8, 3, 55, 10000, 0.00005, 0.01)
+        # self.cross_validation(data, "regression", "abalone", 2, 1, 8, 3, 55, 10000, 0.00005, 0.01)
 
 
     ################ Computer Hardware
-    def hardware(self):
+    def hardware(self, programType):
         data = 'data/machine.data'
         data = np.genfromtxt(data,dtype='str',delimiter=",")
         # remove non-predictive column
@@ -240,14 +381,50 @@ class Models:
         data = np.asarray(data, dtype='float')
         deleted = np.asarray(deleted, dtype='float')
         # Run cross validation
+        problemType = "regression"
+        fileName = "hardware"
+        n_inputs = 6
+        n_outputs = 1
+        batch_size = 35
+        num_runs = 20000
+        verbose = True
+        # BP
+        lr = 0.00005
+        momentum= 0.01      
+        # DE
+        beta = 0.16
+        cross_prob= 0.9
+       # PSO
+        omega = .6
+        cog_1 = 0.2
+        cog_2 = 0.6
+        alpha = 0.99
+        # GA
+        mutate_p = .3
+        selection_rate = .2
+        
+        n_hidden = 0
+        layer_nodes = 0
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p],verbose)
+
+        n_hidden = 1
+        layer_nodes = 8
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p],verbose)
+
+        n_hidden = 2
+        layer_nodes = 4
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p],verbose)
+        
+        # self.cross_validation(data, "regression", "machine", 0, 1, 6, 0, 35, 10000, 0.00005, 0.01)
         # self.cross_validation(data, "regression", "machine", 1, 1, 6, 8, 35, 10000, 0.00005, 0.01)
-        self.cross_validation(data, "regression", "machine", 0, 1, 6, 0, 35, 10000, 0.00005, 0.01)
-        self.cross_validation(data, "regression", "machine", 1, 1, 6, 8, 35, 10000, 0.00005, 0.01)
-        self.cross_validation(data, "regression", "machine", 2, 1, 6, 4, 35, 10000, 0.00005, 0.01)
+        # self.cross_validation(data, "regression", "machine", 2, 1, 6, 4, 35, 10000, 0.00005, 0.01)
 
     
     ############### Forest Fires
-    def fires(self):
+    def fires(self, programType):
         data = 'data/forestfires.data'
         text = []
         # adjust to make cyclic
@@ -292,7 +469,45 @@ class Models:
                     tempRow.append(row[i])
             tempData.append(tempRow)
         data = tempData
-        # self.cross_validation(data, "regression", "forestfires", 1, 1, 14, 6, 7, 8000, 0.00005, 0.02)
-        self.cross_validation(data, "regression", "forestfires", 0, 1, 14, 0, 3, 12000, 0.00005, 0.006)
-        self.cross_validation(data, "regression", "forestfires", 1, 1, 14, 6, 3, 12000, 0.00005, 0.006)
-        self.cross_validation(data, "regression", "forestfires", 2, 1, 14, 4, 3, 12000, 0.00002, 0.006)
+        # Run cross validation
+        problemType = "regression"
+        fileName = "forestfires"
+        n_inputs = 14
+        n_outputs = 1
+        batch_size = 10
+        num_runs = 20000
+        verbose = True
+        # BP
+        lr = 0.00005
+        momentum= 0.006      
+        # DE
+        beta = 0.16
+        cross_prob= 0.9
+        # PSO
+        omega = 0.01
+        cog_1 = 0.01
+        cog_2 = 0.8
+        alpha = 0.93
+        # GA
+        mutate_p = .3
+        selection_rate = .2
+        
+        n_hidden = 0
+        layer_nodes = 0
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
+        n_hidden = 1
+        layer_nodes = 6
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
+        n_hidden = 2
+        layer_nodes = 4
+        net = Network(n_hidden, n_outputs, n_inputs, layer_nodes, problemType, verbose)
+        self.cross_validation(programType, fileName, data, net, batch_size, num_runs, [lr, momentum], [beta, cross_prob], [omega, cog_1, cog_2, alpha], [selection_rate, mutate_p], verbose)
+
+        # # self.cross_validation(data, "regression", "forestfires", 1, 1, 14, 6, 7, 8000, 0.00005, 0.02)
+        # self.cross_validation(data, "regression", "forestfires", 0, 1, 14, 0, 3, 12000, 0.00005, 0.006)
+        # self.cross_validation(data, "regression", "forestfires", 1, 1, 14, 6, 3, 12000, 0.00005, 0.006)
+        # self.cross_validation(data, "regression", "forestfires", 2, 1, 14, 4, 3, 12000, 0.00002, 0.006)

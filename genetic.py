@@ -33,12 +33,12 @@ class GA:
     def selection(self, fitness, rate):
         length = len(self.population)
         top = int(length * rate)
-        print(top)
+        # print(top)
         selection = [i[0] for i in fitness[:top]]
-        print(selection)
+        # print(selection)
         return selection
         
-    def crossover(self, selection, fit_avg):
+    def crossover(self, selection, fit_avg, mutate_p):
         length = len(selection)
         rand1 = random.randint(0, len(selection)-1)
         rand2 = random.randint(0, len(selection)-1)
@@ -72,9 +72,8 @@ class GA:
             # After crossover add weights to child
             child_weights.append(parent1[i])
         # print("child \n", child_weights)
-        self.mutate(child_weights, .2)
+        self.mutate(child_weights, mutate_p)
         # print("mutated \n", child_weights)
-        
         return child_weights
 
 
@@ -94,22 +93,26 @@ class GA:
                         w = w + rand_value
                         weights[i][j][k] = w
 
-    def generate(self, batch, class_outputs):
+    def generate(self, batch, class_outputs, selection_rate, mutate_p):
         count = 0
         convergence = False
         while(not convergence):
             count+=1
+            print("Genration ", count)
             avg, fitness = self.fitness(batch, class_outputs)
-            new_select = self.selection(fitness, .2)
-            self.crossover(new_select, avg)
+            new_select = self.selection(fitness, selection_rate)
+            childs = self.crossover(new_select, avg, mutate_p)
+            self.population.append(childs)
             avg, fitness = self.fitness(batch, class_outputs)
-            if(avg > .9 or count> 1000):
+            print('avg', avg)
+            if(fitness[0][1] > 9 or count> 1000):
                 convergence = True
-            print(fitness[0][1])
+            print("fittest", fitness[0][1])
+            print("second fittest", fitness[1][1])
         fitness, avg = self.fitness(batch, class_outputs)
         # print(fitness, avg)
 
-    def train(self, train_data, class_outputs, batch_size):
+    def train(self, train_data, selection_rate, mutate_p, class_outputs, batch_size):
         # copy training data so original training data doesn't get shuffled
         temp_train = deepcopy(train_data)
         # shuffle array with numpy shuffle
@@ -120,4 +123,4 @@ class GA:
             # print(index)
             batch.append(temp_train[index])
         # update network
-        self.generate(batch, class_outputs)
+        self.generate(batch, class_outputs, selection_rate, mutate_p)
